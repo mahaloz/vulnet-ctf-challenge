@@ -22,16 +22,13 @@ RUN wget -q https://ftp.gnu.org/gnu/inetutils/inetutils-2.7.tar.gz \
 
 RUN /usr/libexec/telnetd --version 2>&1 | head -1
 
-# Low-priv user for the challenge
 RUN useradd -m -s /bin/bash ctfuser \
     && echo "ctfuser:ctfpassword" | chpasswd
 
-# Root-only flag
 RUN echo "FLAG{CVE-2026-24061_telnetd_USER_env_bypass}" > /flag \
     && chown root:root /flag \
     && chmod 400 /flag
 
-# Wire telnetd into inetd
 RUN echo "telnet stream tcp nowait root /usr/libexec/telnetd telnetd" \
         >> /etc/inetd.conf
 
